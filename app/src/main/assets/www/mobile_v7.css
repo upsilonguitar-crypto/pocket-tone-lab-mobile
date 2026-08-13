@@ -1,0 +1,224 @@
+/* Pocket Tone Lab Mobile V7 — genuine phone-first shell.
+   The legacy desktop DOM stays hidden and only provides the tested engine/state.
+   No desktop card grids are rendered in the mobile shell. */
+@media (max-width: 900px) {
+  :root {
+    --m7-bg:#121212;
+    --m7-surface:#1b1b1b;
+    --m7-surface2:#232323;
+    --m7-line:#343434;
+    --m7-text:#f4f4f4;
+    --m7-muted:#8f8f8f;
+    --m7-orange:#f58a23;
+    --m7-orange2:#c8661c;
+    --m7-ok:#56c596;
+    --m7-danger:#df6f69;
+    --m7-top:58px;
+    --m7-bottom:66px;
+  }
+
+  html, body {
+    width:100% !important;
+    max-width:100% !important;
+    height:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    background:var(--m7-bg) !important;
+    overscroll-behavior:none;
+    -webkit-text-size-adjust:100%;
+  }
+  body.m7-mode * { box-sizing:border-box; }
+  body.m7-mode { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif !important; color:var(--m7-text) !important; }
+  body.m7-mode > .noise,
+  body.m7-mode > .sidebar,
+  body.m7-mode > .app-shell,
+  body.m7-mode > .sl6-header,
+  body.m7-mode > .sl6-dock,
+  body.m7-mode > .sl6-backdrop,
+  body.m7-mode > .sl6-sheet { display:none !important; }
+
+  .m7-shell {
+    position:fixed;
+    inset:0;
+    width:100vw;
+    max-width:100vw;
+    height:100dvh;
+    overflow:hidden;
+    display:grid;
+    grid-template-rows:calc(var(--m7-top) + env(safe-area-inset-top)) minmax(0,1fr) calc(var(--m7-bottom) + env(safe-area-inset-bottom));
+    background:var(--m7-bg);
+    z-index:1000;
+  }
+
+  /* App bar */
+  .m7-topbar {
+    min-width:0;
+    padding:env(safe-area-inset-top) 10px 0;
+    display:grid;
+    grid-template-columns:44px minmax(0,1fr) 44px;
+    align-items:center;
+    background:#1f1f1f;
+    border-bottom:1px solid #2c2c2c;
+  }
+  .m7-iconbtn { width:42px;height:42px;border:0;background:transparent;display:grid;place-items:center;padding:0;color:#fff; }
+  .m7-iconbtn img { width:28px;height:28px;object-fit:contain; }
+  .m7-title { min-width:0;text-align:center;line-height:1.1; }
+  .m7-title small { display:block;font-size:8px;letter-spacing:.14em;color:#777;margin-bottom:3px; }
+  .m7-title b { display:block;font-size:15px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .m7-device-dot { width:10px;height:10px;border-radius:50%;background:#666;box-shadow:0 0 0 3px #2b2b2b; }
+  .m7-device-dot.on { background:var(--m7-ok);box-shadow:0 0 0 3px #244638; }
+
+  /* Main viewport */
+  .m7-main { min-width:0;min-height:0;overflow:hidden;background:var(--m7-bg); }
+  .m7-page { display:none;width:100%;height:100%;min-width:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px 18px; }
+  .m7-page.active { display:block; }
+  .m7-page-title { display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:3px 0 14px; }
+  .m7-page-title h1 { margin:0;font-size:22px;font-weight:680;letter-spacing:-.02em; }
+  .m7-page-title small { color:var(--m7-muted);font-size:10px; }
+
+  /* Bottom navigation — exactly phone navigation, never a sidebar. */
+  .m7-nav {
+    min-width:0;
+    padding:4px 5px env(safe-area-inset-bottom);
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    background:#202020;
+    border-top:1px solid #303030;
+  }
+  .m7-nav button { min-width:0;border:0;background:transparent;color:#828282;padding:3px 0 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;font-weight:550; }
+  .m7-nav button img { width:26px;height:22px;object-fit:contain;opacity:.48; }
+  .m7-nav .m7-nav-glyph { height:22px;display:grid;place-items:center;font-size:22px;line-height:1; }
+  .m7-nav button.active { color:var(--m7-orange); }
+  .m7-nav button.active img { opacity:1; }
+
+  /* Effects: one phone screen, one active module, no desktop dashboard. */
+  #m7Effects { padding:0 0 12px; }
+  .m7-preset-strip { height:54px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid #262626;background:#171717; }
+  .m7-preset-strip > button { min-width:0;flex:1;border:0;background:transparent;color:#fff;text-align:left;padding:0; }
+  .m7-preset-strip b { display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .m7-preset-strip small { display:block;color:#777;font-size:9px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .m7-save-mini { flex:0 0 auto !important;width:36px !important;height:36px !important;display:grid !important;place-items:center !important; }
+  .m7-save-mini img { width:24px;height:24px; }
+
+  .m7-chain {
+    width:100%;
+    min-width:0;
+    display:grid;
+    grid-template-columns:repeat(9,minmax(0,1fr));
+    gap:0;
+    padding:9px 5px 7px;
+    border-bottom:1px solid #282828;
+    background:#151515;
+  }
+  .m7-chain button { min-width:0;height:57px;border:0;border-bottom:2px solid transparent;background:transparent;padding:3px 0 2px;color:#747474;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1px; }
+  .m7-chain img { width:29px;height:32px;max-width:88%;object-fit:contain;opacity:.72; }
+  .m7-chain span { max-width:100%;font-size:7px;font-weight:700;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:clip; }
+  .m7-chain button.on img { opacity:1; }
+  .m7-chain button.active { color:#fff;border-bottom-color:var(--m7-orange);background:#1d1d1d;border-radius:5px 5px 0 0; }
+
+  .m7-module-head { width:100%;min-width:0;padding:12px;display:grid;grid-template-columns:50px minmax(0,1fr) 48px;gap:9px;align-items:center;border-bottom:1px solid #292929; }
+  .m7-module-icon { width:50px;height:50px;border-radius:8px;background:#202020;border:1px solid #303030;display:grid;place-items:center; }
+  .m7-module-icon img { width:43px;height:43px;object-fit:contain; }
+  .m7-model { min-width:0; }
+  .m7-model small { display:block;color:#777;font-size:8px;font-weight:700;letter-spacing:.12em;margin:0 0 4px; }
+  .m7-model select { width:100%;min-width:0;height:38px;padding:0 31px 0 10px;border:1px solid #3a3a3a;border-radius:6px;background:#242424;color:#f3f3f3;font-size:14px;outline:none; }
+  .m7-switch { width:46px;height:27px;border:0;border-radius:99px;background:#3a3a3a;padding:3px;position:relative;transition:.15s; }
+  .m7-switch i { display:block;width:21px;height:21px;border-radius:50%;background:#969696;transition:.15s; }
+  .m7-switch.on { background:#70451d; }
+  .m7-switch.on i { transform:translateX(19px);background:var(--m7-orange); }
+
+  .m7-params { width:100%;min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#2b2b2b;border-bottom:1px solid #2b2b2b; }
+  .m7-param { min-width:0;min-height:150px;background:#171717;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden; }
+  .m7-param-wide { grid-column:1/-1;min-height:92px;align-items:stretch;padding:13px 14px; }
+  .m7-param-label { width:100%;text-align:center;color:#7f7f7f;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:5px; }
+  .m7-param-value { font-size:14px;font-weight:650;margin-top:5px;line-height:1; }
+  .m7-knob { width:76px;height:76px;position:relative;background:url('soniclink/knob_bg.png') center/contain no-repeat;touch-action:none; }
+  .m7-knob-pointer { position:absolute;left:37px;top:11px;width:2px;height:20px;border-radius:2px;background:var(--m7-orange);transform-origin:1px 27px; }
+  .m7-param input[type=range] { width:86%;height:24px;margin:5px 0 0;accent-color:var(--m7-orange); }
+  .m7-param-wide select { width:100%;height:42px;border:1px solid #383838;border-radius:6px;background:#232323;color:#fff;padding:0 10px;margin-top:8px; }
+
+  .m7-master { margin:10px 12px 0;padding:10px 12px;border:1px solid #303030;border-radius:8px;background:#1b1b1b;display:grid;grid-template-columns:auto minmax(0,1fr) 42px;gap:9px;align-items:center; }
+  .m7-master span { font-size:9px;color:#858585;font-weight:700;letter-spacing:.08em; }
+  .m7-master input { width:100%;accent-color:var(--m7-orange); }
+  .m7-master b { font-size:15px;text-align:right; }
+  .m7-empty { padding:48px 24px;text-align:center;color:#777; }
+
+  /* Presets — native list rows, not desktop cards. */
+  .m7-search { position:sticky;top:-12px;z-index:2;background:var(--m7-bg);padding:7px 0 8px; }
+  .m7-search input { width:100%;height:44px;border:1px solid #373737;border-radius:9px;background:#202020;color:#fff;padding:0 13px;font-size:15px;outline:none; }
+  .m7-chips { width:100%;display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px; }
+  .m7-chip { border:1px solid #353535;border-radius:99px;background:#202020;color:#9b9b9b;padding:7px 10px;font-size:10px; }
+  .m7-chip.active { border-color:#7a481d;background:#2b2018;color:#ff9a36; }
+  .m7-preset-list { border-top:1px solid #2d2d2d; }
+  .m7-preset-row { width:100%;min-width:0;min-height:68px;border:0;border-bottom:1px solid #2b2b2b;background:transparent;color:#eee;padding:8px 3px;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:9px;align-items:center;text-align:left; }
+  .m7-preset-row.active { background:#211a15; }
+  .m7-preset-num { width:34px;height:34px;border:1px solid #3a3a3a;border-radius:7px;display:grid;place-items:center;font-size:9px;color:#777;background:#202020; }
+  .m7-preset-copy { min-width:0; }
+  .m7-preset-copy b { display:block;font-size:14px;font-weight:630;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .m7-preset-copy small { display:block;font-size:10px;color:#797979;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .m7-preset-amp { max-width:80px;font-size:9px;color:#a3a3a3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right; }
+  .m7-star { color:#6f6f6f;font-size:17px;padding:3px; }
+  .m7-star.on { color:var(--m7-orange); }
+
+  /* Match — vertical workflow, thumb-first. */
+  .m7-current-chip { width:100%;padding:10px 12px;margin-bottom:10px;border:1px solid #303030;border-radius:8px;background:#1b1b1b;display:flex;justify-content:space-between;gap:10px;align-items:center; }
+  .m7-current-chip small { color:#787878;font-size:9px; }
+  .m7-current-chip b { max-width:72%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px; }
+  .m7-source { border:1px solid #303030;border-radius:10px;background:#1b1b1b;margin-bottom:9px;padding:12px; }
+  .m7-source-head { display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px; }
+  .m7-source-head b { font-size:14px; }
+  .m7-status { max-width:55%;font-size:8px;color:#8b8b8b;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .m7-status.good { color:var(--m7-ok); }.m7-status.bad{color:var(--m7-danger)}.m7-status.recording{color:var(--m7-orange)}
+  .m7-button-row { display:grid;grid-template-columns:1fr 1fr;gap:7px; }
+  .m7-btn { min-width:0;min-height:43px;border:1px solid #3a3a3a;border-radius:7px;background:#252525;color:#eee;padding:8px 10px;font-size:11px;font-weight:650; }
+  .m7-btn.primary { background:var(--m7-orange2);border-color:var(--m7-orange);color:#fff; }
+  .m7-btn:disabled { opacity:.35; }
+  .m7-source-meta { display:block;margin-top:8px;color:#707070;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .m7-match-settings { margin:10px 0;border:1px solid #303030;border-radius:9px;background:#1a1a1a;padding:10px; }
+  .m7-match-settings summary { color:#aaa;font-size:11px;font-weight:650;cursor:pointer; }
+  .m7-setting { display:grid;grid-template-columns:95px minmax(0,1fr) 42px;gap:8px;align-items:center;margin-top:10px; }
+  .m7-setting label { color:#7f7f7f;font-size:9px; }.m7-setting b{font-size:10px;text-align:right}.m7-setting input,.m7-setting select{min-width:0;width:100%;accent-color:var(--m7-orange)}
+  .m7-result { margin-top:10px;border:1px solid #323232;border-radius:10px;background:#1b1b1b;padding:12px; }
+  .m7-score { display:flex;align-items:baseline;justify-content:center;gap:3px;padding:6px 0 10px; }.m7-score b{font-size:54px;line-height:1;font-weight:720}.m7-score span{color:#777;font-size:13px}
+  .m7-score-caption { text-align:center;color:#777;font-size:9px;margin-top:-6px;margin-bottom:12px; }
+  .m7-corrections { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px; }
+  .m7-correction { min-width:0;padding:8px 9px;border-radius:6px;background:#232323;display:flex;justify-content:space-between;gap:6px;font-size:10px; }.m7-correction span{color:#8b8b8b}.m7-correction b{color:#eee}
+  .m7-result-actions { display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px; }
+  .m7-iter { margin-top:10px;border-top:1px solid #303030;padding-top:11px; }
+  .m7-iter h3 { margin:0 0 8px;font-size:13px; }.m7-iter-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}.m7-iter-meta span{padding:6px 8px;border:1px solid #303030;border-radius:6px;background:#212121;font-size:9px;color:#858585}.m7-iter-meta b{color:#eee;margin-left:3px}
+  .m7-iter-points { display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px; }.m7-iter-point{min-width:52px;border:1px solid #363636;border-radius:7px;background:#222;padding:7px;text-align:center}.m7-iter-point.best{border-color:#885421;background:#2a2018}.m7-iter-point span{display:block;font-size:8px;color:#777}.m7-iter-point b{display:block;font-size:17px}.m7-iter-point small{font-size:7px;color:#777}
+
+  /* Live — big thumb controls. */
+  .m7-live-hero { border:1px solid #303030;border-radius:10px;background:#1b1b1b;padding:15px;margin-bottom:10px;text-align:center; }
+  .m7-live-hero small { display:block;color:#777;font-size:9px;letter-spacing:.12em; }.m7-live-hero h2{margin:5px 0 2px;font-size:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.m7-live-hero p{margin:0;color:#8a8a8a;font-size:10px}
+  .m7-live-controls { display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:7px;margin-bottom:10px; }.m7-live-controls button{height:68px;border:1px solid #393939;border-radius:9px;background:#242424;color:#eee;font-size:11px;font-weight:700}.m7-live-controls .load{background:#70431b;border-color:#a86425;color:#fff;font-size:13px}
+  .m7-tempo { display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px; }.m7-tempo button{height:46px;border:1px solid #383838;border-radius:8px;background:#222;color:#eee}.m7-tempo b{font-size:16px}.m7-setlist-row{min-height:58px;border-bottom:1px solid #2b2b2b;padding:8px 4px;display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;align-items:center}.m7-setlist-row.active{background:#211a15}.m7-setlist-row>span{color:#777;font-size:9px}.m7-setlist-row b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.m7-setlist-row small{display:block;color:#777;font-size:9px;margin-top:2px}
+
+  /* More / device — settings-list style. */
+  .m7-settings-group { margin-bottom:12px;border:1px solid #303030;border-radius:10px;background:#1b1b1b;overflow:hidden; }
+  .m7-settings-title { padding:10px 12px;color:#777;font-size:9px;font-weight:700;letter-spacing:.1em;border-bottom:1px solid #2e2e2e; }
+  .m7-settings-row { min-height:58px;width:100%;border:0;border-bottom:1px solid #2c2c2c;background:transparent;color:#eee;padding:8px 11px;display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:9px;align-items:center;text-align:left; }.m7-settings-row:last-child{border-bottom:0}.m7-settings-row .icon{width:38px;height:38px;border-radius:8px;background:#252525;display:grid;place-items:center;color:var(--m7-orange);font-size:12px}.m7-settings-row b{display:block;font-size:13px}.m7-settings-row small{display:block;color:#777;font-size:9px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.m7-chevron{color:#666;font-size:18px}.m7-device-panel{padding:12px;border-top:1px solid #303030}.m7-device-line{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px;font-size:10px;color:#858585}.m7-device-line b{color:#eee}.m7-arm{display:flex;align-items:center;gap:9px;padding:10px;border-radius:8px;background:#202020;margin-top:8px}.m7-arm input{width:20px;height:20px;accent-color:var(--m7-orange)}.m7-arm span{font-size:10px;color:#aaa}
+
+  /* Existing safety/send modal restyled as a proper bottom sheet. */
+  body.m7-mode .modal-shell { z-index:3000 !important;position:fixed !important;inset:0 !important;display:none; }
+  body.m7-mode .modal-shell.open { display:block !important; }
+  body.m7-mode .modal-backdrop { position:absolute !important;inset:0 !important;background:#000b !important; }
+  body.m7-mode .transfer-modal { position:absolute !important;left:0 !important;right:0 !important;bottom:0 !important;top:auto !important;width:100% !important;max-width:none !important;max-height:88dvh !important;overflow-y:auto !important;margin:0 !important;padding:20px 14px calc(20px + env(safe-area-inset-bottom)) !important;border:0 !important;border-radius:18px 18px 0 0 !important;background:#202020 !important;transform:none !important; }
+  body.m7-mode .transfer-modal .modal-actions,body.m7-mode .direct-send-box,body.m7-mode .save-slot-box{display:block !important;width:100% !important;min-width:0 !important}.transfer-modal button,.transfer-modal input{max-width:100% !important}.transfer-modal .modal-actions button{width:100%;margin:4px 0}.slot-row{display:grid !important;grid-template-columns:auto 70px minmax(0,1fr) !important;gap:6px !important}.slot-row button{min-width:0 !important;width:auto !important}
+
+  .m7-hidden { display:none !important; }
+  .m7-note { color:#777;font-size:9px;line-height:1.45; }
+  .m7-empty-small { padding:22px 10px;text-align:center;color:#777;font-size:11px; }
+
+  @media (min-width:430px) {
+    .m7-params { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .m7-param-wide { grid-column:auto; }
+  }
+}
+@media (max-width:900px){
+  .m7-shell button,.m7-shell input,.m7-shell select{font-family:inherit}
+  .m7-chain{background-color:#151515;background-image:linear-gradient(#151515dd,#151515dd),url('soniclink/effect_path_bg.svg');background-position:center;background-size:100% 64px;background-repeat:no-repeat}
+  .m7-nav{position:relative;border-top:0}
+  .m7-nav:before{content:"";position:absolute;left:0;right:0;top:-8px;height:13px;background:url('soniclink/bottom_navigation_border.png') center top/100% 13px no-repeat;pointer-events:none}
+}

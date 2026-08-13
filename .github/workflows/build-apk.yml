@@ -44,12 +44,11 @@ jobs:
           node --check app/src/main/assets/www/mobile_extras.js
           node --check app/src/main/assets/www/tone_match_core.js
           node --check app/src/main/assets/www/tone_match.js
-          node --check app/src/main/assets/www/mobile_v5.js
+          node --check app/src/main/assets/www/mobile_v7.js
           node --check app/src/main/assets/www/bootstrap.js
           node tools/test_tone_match.js
           node tools/test_tone_match_iterative.js
-          node tools/test_v6_classic_ui.js
-          node tools/test_v61_responsive.js
+          node tools/test_v7_true_mobile.js
 
       - name: Build debug APK
         run: gradle --no-daemon :app:assembleDebug
