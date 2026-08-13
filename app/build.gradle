@@ -8,8 +8,8 @@ android {
         applicationId 'fr.pockettonelab.mobile'
         minSdk 23
         targetSdk 35
-        versionCode 150
-        versionName '1.5.0-SONICLINK-Premium'
+        versionCode 160
+        versionName '1.6.0-SONICLINK-Classic'
     }
 
     buildTypes {

@@ -48,7 +48,7 @@ jobs:
           node --check app/src/main/assets/www/bootstrap.js
           node tools/test_tone_match.js
           node tools/test_tone_match_iterative.js
-          node tools/test_v5_ui.js
+          node tools/test_v6_classic_ui.js
 
       - name: Build debug APK
         run: gradle --no-daemon :app:assembleDebug
