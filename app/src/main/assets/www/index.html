@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07080a">
+  <title>Pocket Tone Lab X · SONICAKE Pocket Master</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">PT</div>
+      <div><strong>Pocket Tone Lab</strong><span>SONICAKE tone workstation</span></div>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-btn active" data-tab="library" data-label="Tone Studio" title="Tone Studio"><span>◈</span><b>Tone Studio</b></button>
+      <button class="nav-btn" data-tab="generator" data-label="Générateur" title="Générateur"><span>✦</span><b>Générateur</b></button>
+      <button class="nav-btn" data-tab="performance" data-label="Live" title="Performance"><span>▶</span><b>Live</b></button>
+      <button class="nav-btn" data-tab="vault" data-label="Vault & Live" title="Vault & Live"><span>▣</span><b>Vault & Live</b></button>
+      <button class="nav-btn" data-tab="transfer" data-label="Pocket Master" title="Pocket Master"><span>⇪</span><b>Pocket Master</b></button>
+      <button class="nav-btn" data-tab="machine" data-label="Modèles & paramètres" title="Modèles & paramètres"><span>⚙</span><b>Modèles & paramètres</b></button>
+    </nav>
+
+    <div class="sidebar-stats">
+      <div><b>301</b><span>presets</span></div>
+      <div><b>133</b><span>morceaux</span></div>
+      <div><b>46</b><span>artistes</span></div>
+      <div><b>9</b><span>blocs FX</span></div>
+    </div>
+
+    <div class="sidebar-note">
+      <span class="status-dot"></span>
+      Pocket Master FW 1.3.x
+      <small>Preset forge + édition temps réel. Les presets artistes sont des approximations optimisées.</small>
+    </div>
+  </aside>
+
+  <main class="app-shell">
+    <section id="tab-library" class="tab-page active studio-page">
+      <header class="studio-topbar">
+        <div class="studio-heading">
+          <p class="eyebrow">Tone workstation / Pocket Master QME-10</p>
+          <h1>Toute l’interface adopte <em>la grammaire visuelle du pedalboard.</em></h1>
+          <p>Chaque zone reprend le langage du chain view : capsules, lignes fines, halos subtils et gros espace pour tes potards.</p>
+        </div>
+        <div class="studio-top-actions">
+          <button id="togglePresetDrawer" class="primary-btn preset-drawer-trigger" type="button" aria-expanded="false" aria-controls="presetBrowser">▾ Bibliothèque presets</button>
+          <button id="randomBtn" class="ghost-btn">⚡ Aléatoire</button>
+          <button id="favoritesBtn" class="ghost-btn">★ Favoris</button>
+          <button id="studioFocusBtn" class="ghost-btn focus-mode-btn" type="button" title="Mode Tone Studio plein écran">⛶ Focus</button>
+          <button id="studioDeviceButton" class="studio-device-pill" type="button">
+            <span class="device-led"></span>
+            <span><b>Pocket Master</b><small id="studioDeviceText">Non connecté</small></span>
+          </button>
+        </div>
+      </header>
+
+      <section class="hardware-preset-strip" id="hardwarePresetStrip" aria-label="Preset courant">
+        <button id="stripPresetButton" class="strip-main" type="button" title="Ouvrir la bibliothèque">
+          <span class="strip-led"></span>
+          <span class="strip-index">PRESET</span>
+          <span class="strip-title" id="stripPresetTitle">Chargement…</span>
+          <span class="strip-sub" id="stripPresetSub">Pocket Tone Lab</span>
+        </button>
+        <div class="strip-cell strip-amp"><small>AMP</small><b id="stripAmp">—</b></div>
+        <div class="strip-cell strip-drv"><small>DRV</small><b id="stripDrv">—</b></div>
+        <div class="strip-cell strip-pickup"><small>PICKUP</small><b id="stripPickup">—</b></div>
+        <div class="strip-cell strip-match"><small>MATCH</small><b id="stripMatch">—</b></div>
+        <div class="strip-cell strip-vol"><small>VOL</small><b id="stripVol">—</b></div>
+        <button id="stripSendButton" class="strip-action" type="button" title="Envoyer au Pocket Master">⇪</button>
+      </section>
+
+      <div class="studio-layout integrated-layout">
+        <aside class="preset-browser panel integrated-browser" id="presetBrowser">
+          <div class="browser-head">
+            <div><span class="eyebrow">Preset Browser</span><h2 id="resultTitle">Tous les presets</h2></div>
+            <span id="resultCount" class="count-pill"></span>
+          </div>
+
+          <label class="searchbox browser-search"><span>⌕</span><input id="searchInput" placeholder="Vai, Gilmour, Metallica, blues…"></label>
+
+          <div class="quick-presets" aria-label="Filtres rapides">
+            <button class="quick-filter active" data-preset-quick="all">Tous</button>
+            <button class="quick-filter" data-preset-quick="Song">Morceaux</button>
+            <button class="quick-filter" data-preset-quick="Lead">Lead</button>
+            <button class="quick-filter" data-preset-quick="Rhythm">Rhythm</button>
+            <button class="quick-filter" data-preset-quick="Clean">Clean</button>
+            <button class="quick-filter" data-preset-quick="Style">Styles</button>
+          </div>
+
+          <details class="advanced-filters">
+            <summary>Filtres avancés <span>⌄</span></summary>
+            <div class="browser-filter-grid">
+              <select id="artistFilter"><option value="all">Tous les artistes</option></select>
+              <select id="genreFilter"><option value="all">Tous les styles</option></select>
+              <select id="variantFilter">
+                <option value="all">Tous les types</option>
+                <option>Song</option><option>Clean</option><option>Rhythm</option><option>Lead</option><option>Style</option><option>Custom</option>
+              </select>
+              <select id="eraFilter"><option value="all">Toutes les époques</option></select>
+            </div>
+          </details>
+
+          <div class="browser-divider"><span>Bibliothèque</span><small>clique pour charger</small></div>
+          <div id="presetGrid" class="preset-grid"></div>
+        </aside>
+
+        <section id="detailPanel" class="detail-panel panel empty-state studio-console">
+          <div class="empty-console-mark">
+            <div class="empty-knob"></div>
+            <div class="empty-knob"></div>
+            <div class="empty-knob"></div>
+          </div>
+          <h3>Charge un preset</h3>
+          <p>Les potards deviennent le cœur de l’interface : ajuste-les au slider, à la molette ou directement en glissant verticalement sur le bouton.</p>
+        </section>
+      </div>
+    </section>
+
+    <section id="tab-generator" class="tab-page">
+      <header class="topbar compact generator-hero">
+        <div><p class="eyebrow">Tone Generator</p><h1>Construis le son avec <em>trois gros potards.</em></h1><p class="lead">Pars d’un preset existant, ajuste le caractère global puis affine immédiatement tous les blocs dans le même panneau de contrôle.</p></div>
+      </header>
+      <div class="generator-layout knob-generator-layout">
+        <section class="panel generator-controls knob-generator">
+          <div class="generator-source-grid">
+            <label>Preset de base<select id="genBase"></select></label>
+            <label>Type de micro<select id="genPickup"><option>Bridge humbucker</option><option>Neck humbucker</option><option>Bridge single-coil</option><option>Neck single-coil</option><option>Neck + middle single-coil</option><option>Choose to taste</option></select></label>
+          </div>
+          <div class="macro-dial-grid">
+            <label class="macro-dial module-DRV">
+              <span class="macro-title">Agressivité</span>
+              <div id="aggressionKnob" class="knob macro-knob interactive-knob" style="--value:50;--min:0;--max:100"></div>
+              <b id="aggressionVal">50</b><small>GAIN / ATTACK</small>
+              <input id="aggression" class="macro-slider" type="range" min="0" max="100" value="50">
+            </label>
+            <label class="macro-dial module-RVB">
+              <span class="macro-title">Ambiance</span>
+              <div id="ambienceKnob" class="knob macro-knob interactive-knob" style="--value:50;--min:0;--max:100"></div>
+              <b id="ambienceVal">50</b><small>SPACE / DEPTH</small>
+              <input id="ambience" class="macro-slider" type="range" min="0" max="100" value="50">
+            </label>
+            <label class="macro-dial module-AMP">
+              <span class="macro-title">Brillance</span>
+              <div id="brightnessKnob" class="knob macro-knob interactive-knob" style="--value:50;--min:0;--max:100"></div>
+              <b id="brightnessVal">50</b><small>TONE / PRESENCE</small>
+              <input id="brightness" class="macro-slider" type="range" min="0" max="100" value="50">
+            </label>
+            <label class="macro-dial module-IR">
+              <span class="macro-title">Chaleur</span>
+              <div id="warmthKnob" class="knob macro-knob interactive-knob" style="--value:50;--min:0;--max:100"></div>
+              <b id="warmthVal">50</b><small>BODY / WARMTH</small>
+              <input id="warmth" class="macro-slider" type="range" min="0" max="100" value="50">
+            </label>
+            <label class="macro-dial module-EQ">
+              <span class="macro-title">Tightness</span>
+              <div id="tightnessKnob" class="knob macro-knob interactive-knob" style="--value:50;--min:0;--max:100"></div>
+              <b id="tightnessVal">50</b><small>LOW END / ATTACK</small>
+              <input id="tightness" class="macro-slider" type="range" min="0" max="100" value="50">
+            </label>
+            <label class="macro-dial module-FX1">
+              <span class="macro-title">Sustain</span>
+              <div id="sustainKnob" class="knob macro-knob interactive-knob" style="--value:50;--min:0;--max:100"></div>
+              <b id="sustainVal">50</b><small>HOLD / COMPRESSION</small>
+              <input id="sustain" class="macro-slider" type="range" min="0" max="100" value="50">
+            </label>
+          </div>
+          <button id="generateBtn" class="primary-btn generator-main-btn">✦ Générer et ouvrir le panneau complet</button>
+          <p class="small-note">Le moteur modifie les paramètres tout en restant dans les blocs et plages disponibles sur le Pocket Master.</p>
+        </section>
+        <section id="generatedDetail" class="detail-panel panel empty-state generated-console"><div class="empty-console-mark"><div class="empty-knob"></div><div class="empty-knob"></div><div class="empty-knob"></div></div><h3>Ton preset apparaîtra ici</h3><p>Génère-le puis travaille chaque potard exactement comme dans le Tone Studio.</p></section>
+      </div>
+    </section>
+
+
+    <section id="tab-performance" class="tab-page performance-page">
+      <header class="mobile-live-header">
+        <div><p class="eyebrow">Performance Mode</p><h1>LIVE <em>CONTROL</em></h1><p>Une vue scène pensée pour les doigts : preset courant, setlist, tempo et contrôles géants.</p></div>
+        <button id="keepAwakeBtn" class="ghost-btn">☀ Écran actif</button>
+      </header>
+      <section class="performance-console panel">
+        <div class="performance-now">
+          <span class="performance-kicker">NOW PLAYING</span>
+          <h2 id="performancePresetName">—</h2>
+          <p id="performancePresetMeta">Charge un preset depuis Tone Studio ou ta setlist.</p>
+          <div class="performance-meter"><span id="performanceMatchBar"></span></div>
+        </div>
+        <div class="performance-actions">
+          <button id="performancePrev" class="performance-big">←<small>PREV</small></button>
+          <button id="performanceSend" class="performance-big performance-send">⚡<small>LOAD</small></button>
+          <button id="performanceNext" class="performance-big">→<small>NEXT</small></button>
+        </div>
+        <div class="performance-subgrid">
+          <button id="tapTempoBtn" class="performance-tap"><b>TAP</b><span id="tapTempoValue">120 BPM</span></button>
+          <button id="performanceGuard" class="performance-guard"><b>◇ GUARD</b><span id="performanceGuardText">WRITE LOCKED</span></button>
+        </div>
+        <div class="performance-list-wrap"><div class="section-title"><div><span class="eyebrow">Setlist locale</span><h2>Ordre de scène</h2></div><span id="performanceSetCount" class="count-pill">0</span></div><div id="performanceSetlist" class="performance-setlist"></div></div>
+      </section>
+    </section>
+
+    <section id="tab-vault" class="tab-page">
+      <header class="topbar compact"><div><p class="eyebrow">Native preset lab · setlists · safety</p><h1>Le <em>Vault</em> transforme tes presets en vraie bibliothèque de travail.</h1><p class="lead">Import/export natif .prst, inspection CRC, snapshots A/B, setlists, analyse Tone Health et outils tempo — tout fonctionne hors matériel.</p></div></header>
+      <div class="vault-grid">
+        <section class="panel vault-card native-prst-card">
+          <div class="vault-card-head"><div><span class="eyebrow">Native format</span><h2>.prst Lab</h2></div><span class="native-badge">515 B · CRC8</span></div>
+          <p>Dépose un vrai fichier Pocket Master : l’app vérifie signature, CRC, volume, BPM, chaîne, FXID et matrice de paramètres avant import.</p>
+          <label class="drop-prst" id="prstDropZone"><input id="prstFileInput" type="file" accept=".prst,application/octet-stream"><span>⇩</span><b>Importer un .prst</b><small>Analyse offline, aucune commande n’est envoyée à la pédale.</small></label>
+          <div id="prstInspector" class="prst-inspector empty">Aucun fichier analysé.</div>
+          <div class="vault-actions"><button id="importPrstToStudioBtn" class="primary-btn" disabled>Ouvrir dans Tone Studio</button><button id="exportNativePrstBtn" class="ghost-btn">Exporter le preset courant en .prst</button></div>
+        </section>
+
+        <section class="panel vault-card">
+          <div class="vault-card-head"><div><span class="eyebrow">A/B & Undo</span><h2>Snapshots</h2></div><span id="snapshotCount" class="count-pill">0</span></div>
+          <p>Capture une version du son avant de toucher aux potards. Restauration locale uniquement : aucun write hardware.</p>
+          <div class="vault-actions"><button id="createSnapshotBtn" class="primary-btn">＋ Snapshot du preset courant</button><button id="clearSnapshotsBtn" class="ghost-btn">Effacer</button></div>
+          <div id="snapshotList" class="snapshot-list"></div>
+        </section>
+
+        <section class="panel vault-card">
+          <div class="vault-card-head"><div><span class="eyebrow">Live workflow</span><h2>Setlist Builder</h2></div><span id="setlistCount" class="count-pill">0</span></div>
+          <p>Prépare l’ordre de tes sons sans écrire sur la pédale. Tu peux réordonner, charger et exporter la setlist en JSON.</p>
+          <div class="vault-actions"><button id="addSetlistBtn" class="primary-btn">＋ Ajouter le preset courant</button><button id="exportSetlistBtn" class="ghost-btn">⇩ Export JSON</button><button id="clearSetlistBtn" class="ghost-btn">Effacer</button></div>
+          <div id="setlistList" class="setlist-list"></div>
+        </section>
+
+        <section class="panel vault-card">
+          <div class="vault-card-head"><div><span class="eyebrow">Preventive analyzer</span><h2>Tone Health</h2></div><span id="toneHealthScore" class="health-score">—</span></div>
+          <p>Contrôle gain staging, volumes et densité d’ambiance avant de jouer ou de sauvegarder.</p>
+          <button id="analyzeToneBtn" class="primary-btn">Analyser le preset courant</button>
+          <div id="toneHealthFindings" class="health-findings"><div class="health-empty">Lance l’analyse pour obtenir les recommandations.</div></div>
+        </section>
+
+        <section class="panel vault-card tempo-card">
+          <div class="vault-card-head"><div><span class="eyebrow">Tempo tools</span><h2>BPM → Delay</h2></div><span class="native-badge">ms</span></div>
+          <div class="tempo-controls"><label>BPM<input id="tempoBpm" type="number" min="40" max="300" value="120"></label><label>Division<select id="tempoDivision"><option value="1">1/4</option><option value="0.5">1/8</option><option value="0.75">1/8 pointée</option><option value="0.333333">1/8 triolet</option><option value="2">1/2</option></select></label></div>
+          <div class="tempo-result"><small>DELAY TIME</small><b id="tempoMs">500 ms</b></div>
+          <button id="applyTempoBtn" class="ghost-btn">Appliquer au Delay courant</button>
+        </section>
+      </div>
+    </section>
+
+    <section id="tab-transfer" class="tab-page">
+      <header class="topbar compact"><div><p class="eyebrow">Direct hardware bridge</p><h1>Pocket Tone Lab <em>parle directement à la pédale.</em></h1><p class="lead">Branche le Pocket Master en USB : l'application ouvre le port MIDI, charge le protocole SysEx courant et peut appliquer le preset sans passer par PocketEdit.</p></div></header>
+      <div class="transfer-grid">
+        <section class="panel transfer-card accent-card direct-card">
+          <div class="transfer-icon">USB</div><span class="eyebrow">Direct · X</span><h2>Connecteur USB direct</h2>
+          <p>MIDI Android natif + SysEx est disponible, mais <strong>aucune écriture n’est autorisée par défaut</strong>. La connexion seule reste en mode protégé.</p>
+          <div id="directStatus" class="device-status"><span class="device-led"></span><div><b>Non connecté</b><small>Branche la pédale en USB puis autorise l'accès MIDI.</small></div></div>
+          <div class="device-connect-row">
+            <button id="scanMidiBtn" class="primary-btn">⌁ Détecter le Pocket Master</button>
+            <select id="midiDeviceSelect" class="device-select" hidden></select>
+            <button id="connectMidiBtn" class="ghost-btn" hidden>Connecter</button>
+            <button id="disconnectMidiBtn" class="ghost-btn" hidden>Déconnecter</button>
+          </div>
+          <div class="hardware-guard"><div><span class="guard-shield">◇</span><div><b>Hardware Guard</b><small>Verrou d’écriture activé par défaut.</small></div></div><label class="guard-arm"><input id="hardwareWriteArm" type="checkbox"><span></span><b>Armer les écritures temporaires</b></label></div><label class="live-sync-toggle disabled"><input id="liveSyncToggle" type="checkbox" disabled><span></span><b>Live Sync</b><small>Disponible uniquement après armement explicite.</small></label>
+          <div id="protocolStatus" class="protocol-status">Protocole chargé uniquement au moment de la connexion.</div>
+        </section>
+        <section class="panel transfer-card">
+          <div class="transfer-icon">JSON</div><span class="eyebrow">Fallback</span><h2>PocketEdit JSON</h2>
+          <p>L'export JSON reste disponible : utile si tu veux archiver, partager ou importer manuellement le preset dans PocketEdit.</p>
+          <button id="openPocketEditTab" class="ghost-btn">Ouvrir PocketEdit ↗</button>
+        </section>
+        <section class="panel transfer-card warning-card">
+          <div class="transfer-icon">PR</div><span class="eyebrow">Format natif · Beta contrôlée</span><h2>.prst natif compris</h2>
+          <p>Le codec reconstruit le fichier de référence octet pour octet et recalcule son CRC-8. L’export reste un workflow fichier/offline : tu peux le tester dans SONICLINK avant toute écriture matérielle.</p>
+          <button id="transferExportNativeBtn" class="ghost-btn">⇩ Exporter le preset courant en .prst</button>
+        </section>
+      </div>
+      <section class="panel transfer-steps">
+        <div><span>01</span><b>Branche le Pocket Master en USB</b><p>Android détecte les périphériques MIDI USB/Bluetooth exposés par le système.</p></div>
+        <div><span>02</span><b>Choisis ou génère un preset</b><p>Tu peux encore modifier chaque potard avant l'envoi.</p></div>
+        <div><span>03</span><b>Envoie sans sauvegarder</b><p>Le son est appliqué à la pédale pour l'essayer immédiatement.</p></div>
+        <div><span>04</span><b>Sauvegarde en User 1–50</b><p>Seulement si le son te plaît : le slot choisi est alors écrasé.</p></div>
+      </section>
+      <section class="panel midi-console-card">
+        <div class="section-title"><div><span class="eyebrow">Hardware console</span><h2>Journal du connecteur</h2></div><button id="clearMidiLogBtn" class="ghost-btn small-btn">Effacer</button></div>
+        <div id="midiLog" class="midi-log"><div class="midi-log-empty">Aucune communication MIDI pour le moment.</div></div>
+      </section>
+    </section>
+
+    <section id="tab-machine" class="tab-page">
+      <header class="topbar compact"><div><p class="eyebrow">Pocket Master map</p><h1>Les <em>blocs réels</em> de la machine.</h1><p class="lead">Catalogue enrichi avec les définitions de paramètres utilisées par PocketEdit : modèles, plages et paramètres exploités par le moteur de presets.</p></div></header>
+      <div id="machineCatalog" class="machine-catalog"></div>
+    </section>
+  </main>
+
+  <div id="transferModal" class="modal-shell" aria-hidden="true">
+    <div class="modal-backdrop" data-close-transfer></div>
+    <section class="transfer-modal panel" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close-transfer>×</button>
+      <p class="eyebrow">Pocket Master bridge</p>
+      <h2>Envoyer vers la pédale</h2>
+      <p id="transferPresetName" class="modal-sub"></p>
+      <label class="device-name-label">Nom sur le Pocket Master <span>10 caractères max</span><input id="deviceName" maxlength="10" autocomplete="off"></label>
+      <div id="directModalStatus" class="compat-box direct-compat"><span class="compat-dot"></span><div><b>Connecteur direct</b><small>Connecte le Pocket Master en USB depuis l'onglet Pocket Master.</small></div></div>
+      <div class="direct-send-box">
+        <div class="direct-send-head"><div><b>1. Tester sur la pédale</b><small>Applique le preset sans l'enregistrer dans un slot.</small></div><span id="directProgressText">Prêt</span></div>
+        <div class="direct-progress"><span id="directProgressBar"></span></div>
+        <button id="sendDirectBtn" class="primary-btn">⚡ Envoyer maintenant au Pocket Master</button>
+      </div>
+      <div class="save-slot-box">
+        <label class="persistent-confirm"><input id="persistentWriteConfirm" type="checkbox"><span></span><b>J’autorise explicitement une écriture permanente sur un slot User</b></label>
+        <label>2. Sauvegarder si le son te plaît <span>écrase le slot User choisi</span><div class="slot-row"><span>User</span><input id="directSlot" type="number" min="1" max="50" value="1"><button id="saveDirectBtn" class="danger-outline-btn">Sauvegarder dans ce slot</button></div></label>
+      </div>
+      <div class="modal-separator"><span>ou garder le workflow fichier</span></div>
+      <div class="modal-actions compact-actions">
+        <button id="exportNativeModalBtn" class="ghost-btn">⇩ Exporter .prst</button><button id="exportPocketEditBtn" class="ghost-btn">⇩ Exporter JSON</button>
+        <button id="copyPocketEditBtn" class="ghost-btn">⧉ Copier JSON</button>
+        <button id="openPocketEditBtn" class="ghost-btn">PocketEdit ↗</button>
+      </div>
+      <p class="proprietary-note"><strong>Principe :</strong> l'envoi direct utilise MIDI Android natif et les commandes SysEx du Pocket Master. La sauvegarde permanente n'est effectuée qu'après confirmation explicite du slot User 1–50.</p>
+    </section>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="bootstrap.js"></script>
+  <script src="mobile_api.js"></script>
+  <script src="mobile_connector.js"></script>
+  <script src="app.js"></script>
+  <script src="mobile_extras.js"></script>
+</body>
+</html>
