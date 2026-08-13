@@ -1,3 +1,7 @@
+# V8 TRUE MOBILE — Native Viewport
+
+Cette version ne rend plus l’interface desktop dans l’application Android. Le DOM historique reste caché comme moteur, tandis que la couche visible est une UI téléphone plein écran. Le WebView respecte `width=device-width` et n’impose plus `setInitialScale(100)`.
+
 # Pocket Tone Lab Mobile X
 
 Application Android autonome pour SONICAKE Pocket Master / QME-10.

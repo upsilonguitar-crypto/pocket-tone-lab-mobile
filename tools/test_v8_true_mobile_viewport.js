@@ -1,0 +1,24 @@
+const fs=require('fs');
+const path=require('path');
+const root=path.join(__dirname,'..');
+const www=path.join(root,'app/src/main/assets/www');
+const html=fs.readFileSync(path.join(www,'index.html'),'utf8');
+const css=fs.readFileSync(path.join(www,'mobile_v8.css'),'utf8');
+const js=fs.readFileSync(path.join(www,'mobile_v8.js'),'utf8');
+const java=fs.readFileSync(path.join(root,'app/src/main/java/fr/pockettonelab/mobile/MainActivity.java'),'utf8');
+function ok(v,m){if(!v)throw new Error(m)}
+ok(html.includes('class="m7-mode"'),'mobile mode must exist before JS');
+ok(html.includes('mobile_v8.css'),'V8 CSS missing');
+ok(html.includes('mobile_v8.js'),'V8 JS missing');
+ok(!html.includes('classic_v61_responsive.css'),'legacy responsive CSS must not load');
+ok(!html.includes('classic_v6.css'),'legacy classic CSS must not load');
+ok(!css.includes('@media (max-width: 900px)'),'V8 shell must not be gated by desktop breakpoint');
+ok(css.includes('body.m7-mode > .app-shell'),'legacy desktop shell must be hidden');
+ok(css.includes('.m7-shell'),'mobile shell missing');
+ok(js.includes("document.body.classList.add('m7-mode')"),'V8 JS mobile mode missing');
+ok(!js.includes("matchMedia('(max-width: 900px)')"),'V8 JS must not rely on viewport breakpoint');
+ok(java.includes('setUseWideViewPort(true)'),'WebView must honor meta viewport');
+ok(java.includes('setInitialScale(0)'),'WebView must use density-aware default scale');
+ok(!java.includes('setInitialScale(100)'),'density-agnostic 100 scale must be removed');
+ok(java.includes('MATCH_PARENT'),'WebView must fill the Activity');
+console.log('V8 TRUE MOBILE native viewport OK');

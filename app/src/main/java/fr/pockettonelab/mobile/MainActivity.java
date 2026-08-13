@@ -54,6 +54,9 @@ public class MainActivity extends Activity {
 
         midi = new MidiHardwareController(this);
         webView = new WebView(this);
+        webView.setLayoutParams(new android.view.ViewGroup.LayoutParams(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         setContentView(webView);
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setDatabaseEnabled(true);
@@ -62,8 +65,9 @@ public class MainActivity extends Activity {
         s.setBuiltInZoomControls(false); s.setDisplayZoomControls(false);
         // Mobile app: render at the physical CSS width of the phone.
         // The previous wide/overview mode could keep a desktop-like layout and cause horizontal panning.
-        s.setLoadWithOverviewMode(false); s.setUseWideViewPort(false); s.setTextZoom(100);
-        webView.setInitialScale(100);
+        s.setLoadWithOverviewMode(false); s.setUseWideViewPort(true); s.setTextZoom(100);
+        s.setSupportZoom(false);
+        webView.setInitialScale(0);
         webView.setHorizontalScrollBarEnabled(false);
         if (Build.VERSION.SDK_INT >= 16) {
             s.setAllowFileAccessFromFileURLs(true);

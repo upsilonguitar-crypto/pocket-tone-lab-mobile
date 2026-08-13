@@ -49,6 +49,7 @@ jobs:
           node tools/test_tone_match.js
           node tools/test_tone_match_iterative.js
           node tools/test_v7_true_mobile.js
+          node tools/test_v8_true_mobile_viewport.js
 
       - name: Build debug APK
         run: gradle --no-daemon :app:assembleDebug
