@@ -63,7 +63,6 @@
     const nav=$('.nav-tabs'); if(nav) observer.observe(nav,{attributes:true,subtree:true,attributeFilter:['class']});
     document.addEventListener('click', e=>{
       if(e.target.closest('.preset-card')) setTimeout(()=>{setDock('effects');sync()},60);
-      if(e.target.closest('[data-chain-module]')) setTimeout(()=>e.target.closest('[data-chain-module]')?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}),30);
     },true);
     sync();
   }

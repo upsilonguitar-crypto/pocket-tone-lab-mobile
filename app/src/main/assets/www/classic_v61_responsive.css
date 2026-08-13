@@ -1,0 +1,257 @@
+/* Pocket Tone Lab Mobile V6.1 — hard mobile viewport fix
+   No page-level horizontal scrolling. Everything must fit the physical phone width. */
+@media (max-width:900px){
+  html,body{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+    overscroll-behavior-x:none!important;
+  }
+  body.soniclink-classic-v6{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  /* Kill width leaks inherited from desktop/mobile legacy layers. */
+  body.soniclink-classic-v6 .app-shell,
+  body.soniclink-classic-v6 .tab-page,
+  body.soniclink-classic-v6 .panel,
+  body.soniclink-classic-v6 .studio-layout,
+  body.soniclink-classic-v6 #detailPanel,
+  body.soniclink-classic-v6 .module-list,
+  body.soniclink-classic-v6 .module-card,
+  body.soniclink-classic-v6 .module-title,
+  body.soniclink-classic-v6 .module-name,
+  body.soniclink-classic-v6 .module-select-zone,
+  body.soniclink-classic-v6 .knob-grid,
+  body.soniclink-classic-v6 .tm-source-grid,
+  body.soniclink-classic-v6 .tm-source-card,
+  body.soniclink-classic-v6 .tm-console,
+  body.soniclink-classic-v6 .tm-result,
+  body.soniclink-classic-v6 .performance-console,
+  body.soniclink-classic-v6 .transfer-grid,
+  body.soniclink-classic-v6 .transfer-card,
+  body.soniclink-classic-v6 .vault-layout,
+  body.soniclink-classic-v6 .vault-grid,
+  body.soniclink-classic-v6 .machine-catalog{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  body.soniclink-classic-v6 img,
+  body.soniclink-classic-v6 svg,
+  body.soniclink-classic-v6 canvas,
+  body.soniclink-classic-v6 audio{
+    max-width:100%!important;
+  }
+
+  body.soniclink-classic-v6 button,
+  body.soniclink-classic-v6 input,
+  body.soniclink-classic-v6 select,
+  body.soniclink-classic-v6 textarea,
+  body.soniclink-classic-v6 label,
+  body.soniclink-classic-v6 div,
+  body.soniclink-classic-v6 section{
+    min-width:0;
+  }
+
+  /* Header must always fit, including narrow Samsung / Android WebView widths. */
+  .sl6-header{
+    width:100%!important;
+    max-width:100%!important;
+    grid-template-columns:40px minmax(0,1fr) auto!important;
+    padding-left:max(4px,env(safe-area-inset-left))!important;
+    padding-right:max(4px,env(safe-area-inset-right))!important;
+  }
+  .sl6-title{padding:0 5px!important;overflow:hidden!important}
+  .sl6-title small{font-size:8px!important}
+  .sl6-title b{font-size:14px!important}
+  .sl6-head-actions{min-width:0!important;flex:0 0 auto!important}
+  .sl6-head-actions .sl6-iconbtn{width:34px!important}
+  .sl6-head-actions .sl6-iconbtn img{width:23px!important;height:23px!important}
+  .sl6-iconbtn{width:38px!important}
+  .sl6-iconbtn img{width:30px!important;height:30px!important}
+
+  /* IMPORTANT: all nine FX modules fit on one screen. No sideways chain navigation. */
+  body.soniclink-classic-v6 .soniclink-chain,
+  body.soniclink-classic-v6 .studio-console .chain.soniclink-chain,
+  body.soniclink-classic-v6 .generated-console .chain.soniclink-chain{
+    display:grid!important;
+    grid-template-columns:repeat(9,minmax(0,1fr))!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    gap:1px!important;
+    overflow-x:hidden!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:none!important;
+    padding:10px 2px 9px!important;
+  }
+  body.soniclink-classic-v6 .chain-node,
+  body.soniclink-classic-v6 .studio-console .chain-node,
+  body.soniclink-classic-v6 .generated-console .chain-node{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    flex:initial!important;
+    height:64px!important;
+    padding:3px 0!important;
+    gap:1px!important;
+    scroll-snap-align:none!important;
+    overflow:hidden!important;
+  }
+  body.soniclink-classic-v6 .chain-module-art{
+    width:clamp(28px,8.2vw,39px)!important;
+    height:36px!important;
+  }
+  body.soniclink-classic-v6 .chain-node b{
+    width:100%!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    font-size:clamp(6px,1.9vw,8px)!important;
+    text-align:center!important;
+  }
+  body.soniclink-classic-v6 .chain-node small{display:none!important}
+
+  /* One editor, always inside viewport. */
+  body.soniclink-classic-v6 .module-card.editor-active{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    padding-left:2px!important;
+    padding-right:2px!important;
+  }
+  body.soniclink-classic-v6 .module-title{
+    grid-template-columns:minmax(0,1fr) 48px!important;
+    gap:6px!important;
+  }
+  body.soniclink-classic-v6 .module-name{
+    grid-template-columns:52px minmax(0,1fr)!important;
+    gap:7px!important;
+  }
+  body.soniclink-classic-v6 .soniclink-module-badge{
+    width:52px!important;height:46px!important;
+  }
+  body.soniclink-classic-v6 .soniclink-module-badge img{
+    width:48px!important;height:42px!important;
+  }
+  body.soniclink-classic-v6 .model-select{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding-left:8px!important;
+    padding-right:26px!important;
+    font-size:13px!important;
+  }
+
+  /* Knobs are fluid, never wider than their grid cell. */
+  body.soniclink-classic-v6 .knob-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px 2px!important;
+    overflow:hidden!important;
+  }
+  body.soniclink-classic-v6 .knob-wrap{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    min-height:128px!important;
+  }
+  body.soniclink-classic-v6 .knob{
+    width:clamp(64px,21vw,80px)!important;
+    height:clamp(64px,21vw,80px)!important;
+    max-width:80px!important;
+    max-height:80px!important;
+  }
+  body.soniclink-classic-v6 .param-slider,
+  body.soniclink-classic-v6 .select-param{max-width:100%!important}
+
+  /* Preset browser is a true fixed sheet, not an off-screen page wider than viewport. */
+  body.soniclink-classic-v6 #presetBrowser{
+    left:0!important;
+    right:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+  }
+  body.soniclink-classic-v6 .quick-presets{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    overflow-x:hidden!important;
+  }
+  body.soniclink-classic-v6 .browser-filter-grid{grid-template-columns:1fr!important}
+
+  /* Tone Match: no horizontal rows/timelines on mobile. */
+  body.soniclink-classic-v6 .tm-card-head,
+  body.soniclink-classic-v6 .tm-console-head,
+  body.soniclink-classic-v6 .tm-result-head,
+  body.soniclink-classic-v6 .tm-iter-head{
+    min-width:0!important;
+    max-width:100%!important;
+    flex-wrap:wrap!important;
+  }
+  body.soniclink-classic-v6 .tm-window-controls,
+  body.soniclink-classic-v6 .tm-settings,
+  body.soniclink-classic-v6 .tm-settings-iterative,
+  body.soniclink-classic-v6 .tm-result-grid,
+  body.soniclink-classic-v6 .tm-iter-actions{
+    grid-template-columns:1fr!important;
+  }
+  body.soniclink-classic-v6 .tm-window-controls button,
+  body.soniclink-classic-v6 .tm-ab-actions #tmApplyBtn,
+  body.soniclink-classic-v6 .tm-ab-actions #tmSendBtn{grid-column:auto!important}
+  body.soniclink-classic-v6 .tm-delta-row{
+    grid-template-columns:48px minmax(0,1fr) 38px!important;
+  }
+  body.soniclink-classic-v6 .tm-iter-timeline{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    overflow-x:hidden!important;
+    gap:5px!important;
+  }
+  body.soniclink-classic-v6 .tm-iter-point{
+    width:100%!important;
+    min-width:0!important;
+    flex:initial!important;
+  }
+  body.soniclink-classic-v6 .tm-iter-point:after{display:none!important}
+
+  /* Live / tools: prevent grid children from expanding the page. */
+  body.soniclink-classic-v6 .performance-actions{
+    grid-template-columns:1fr 1.15fr 1fr!important;
+    gap:5px!important;
+  }
+  body.soniclink-classic-v6 .performance-big{
+    min-width:0!important;
+    padding-left:4px!important;
+    padding-right:4px!important;
+    font-size:clamp(24px,8vw,32px)!important;
+  }
+  body.soniclink-classic-v6 .performance-set-row{
+    grid-template-columns:32px minmax(0,1fr) auto!important;
+    max-width:100%!important;
+  }
+  body.soniclink-classic-v6 .transfer-modal{
+    left:6px!important;
+    right:6px!important;
+    width:auto!important;
+    max-width:calc(100% - 12px)!important;
+  }
+
+  /* Old animation transforms may create a visual horizontal jump. */
+  body.soniclink-classic-v6 .tab-page{animation:none!important;transform:none!important}
+}
+
+@media (max-width:360px){
+  .sl6-head-actions .sl6-iconbtn{width:31px!important}
+  .sl6-title b{font-size:13px!important}
+  body.soniclink-classic-v6 .soniclink-chain{gap:0!important}
+  body.soniclink-classic-v6 .chain-module-art{width:28px!important;height:32px!important}
+  body.soniclink-classic-v6 .knob-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.soniclink-classic-v6 .knob{width:76px!important;height:76px!important}
+  body.soniclink-classic-v6 .tm-iter-timeline{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}

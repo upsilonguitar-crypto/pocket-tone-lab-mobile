@@ -60,7 +60,11 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(true); s.setAllowContentAccess(true);
         s.setMediaPlaybackRequiresUserGesture(false);
         s.setBuiltInZoomControls(false); s.setDisplayZoomControls(false);
-        s.setLoadWithOverviewMode(true); s.setUseWideViewPort(true);
+        // Mobile app: render at the physical CSS width of the phone.
+        // The previous wide/overview mode could keep a desktop-like layout and cause horizontal panning.
+        s.setLoadWithOverviewMode(false); s.setUseWideViewPort(false); s.setTextZoom(100);
+        webView.setInitialScale(100);
+        webView.setHorizontalScrollBarEnabled(false);
         if (Build.VERSION.SDK_INT >= 16) {
             s.setAllowFileAccessFromFileURLs(true);
             s.setAllowUniversalAccessFromFileURLs(true); // runtime PocketEdit protocol refresh from raw GitHub.
