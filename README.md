@@ -118,3 +118,19 @@ Depuis la racine, adapter les chemins si besoin puis lancer avec Node 22+ :
 3. Vérifier que la détection MIDI est correcte.
 4. Pour un premier envoi, utiliser uniquement une écriture **temporaire**.
 5. Ne tester la sauvegarde permanente que sur un slot User dont le contenu est sauvegardé ailleurs.
+
+## V5 — SONICLINK Premium Mobile UI
+
+V5 conserve le moteur V4 et remplace la présentation mobile par une coque dédiée :
+
+- 5 onglets seulement : Tone / Presets / Match / Live / Tools ;
+- app-bar mobile avec preset courant et statut USB ;
+- Preset Browser en bottom-sheet ;
+- chaîne FX horizontale inspirée de SONICLINK ;
+- un seul module ouvert à la fois avec gros contrôles tactiles ;
+- Tone Match itératif présenté comme un workflow mobile ;
+- Live Control plein écran ;
+- Generator, Vault, Pocket Master et catalogue rangés sous Tools ;
+- Hardware Guard et toutes les protections V4 inchangés.
+
+Les anciens IDs HTML/API sont conservés afin de ne pas casser le codec `.prst`, Tone Match, MIDI/SysEx, le Vault ou les tests existants.

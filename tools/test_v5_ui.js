@@ -1,0 +1,10 @@
+const fs=require('fs'), path=require('path');
+const root=path.join(__dirname,'..','app','src','main','assets','www');
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const css=fs.readFileSync(path.join(root,'mobile_v5.css'),'utf8');
+const js=fs.readFileSync(path.join(root,'mobile_v5.js'),'utf8');
+const requiredIds=['detailPanel','presetBrowser','togglePresetDrawer','stripPresetTitle','studioDeviceText','tmAnalyzeBtn','tmIterPanel','performanceSend','hardwareWriteArm'];
+for(const id of requiredIds) if(!html.includes(`id="${id}"`)) throw new Error(`missing legacy contract ${id}`);
+for(const asset of ['mobile_v5.css','mobile_v5.js']) if(!html.includes(asset)) throw new Error(`missing ${asset} include`);
+for(const token of ['v5-appbar','v5-dock','v5-tools-sheet','soniclink-chain','tm-source-grid']) if(!css.includes(token)&&!js.includes(token)) throw new Error(`missing V5 token ${token}`);
+console.log('V5 mobile UI smoke test OK');
