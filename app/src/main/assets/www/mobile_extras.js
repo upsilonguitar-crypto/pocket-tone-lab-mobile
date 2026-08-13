@@ -16,7 +16,7 @@
   let perfIndex=0,keepAwake=false,taps=[];
   function buzz(ms=18){try{AndroidBridge?.vibrate(ms)}catch{}}
   function currentPerfPreset(){if(state.setlist?.length){perfIndex=Math.max(0,Math.min(perfIndex,state.setlist.length-1));return state.setlist[perfIndex]?.preset||state.current}return state.current}
-  function setCurrent(p){if(!p)return;state.current=structuredClone(p);renderDetail(state.current,$m('#detailPanel'));updateHardwareStrip(state.current);renderPresets();syncPerformance();buzz(16)}
+  function setCurrent(p){if(!p)return;state.current=structuredClone(p);renderDetail(state.current,$m('#detailPanel'));updateHardwareStrip(state.current);window.PTLToneMatch?.syncCurrentPreset?.();renderPresets();syncPerformance();buzz(16)}
   function syncPerformance(){
     const p=currentPerfPreset(),list=$m('#performanceSetlist');
     if($m('#performanceSetCount'))$m('#performanceSetCount').textContent=state.setlist?.length||0;

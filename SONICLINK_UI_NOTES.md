@@ -9,6 +9,14 @@ Cette édition reprend la grammaire graphique et les assets du SONICLINK V1.7.2 
 - modèle, bypass, déplacement et paramètres dans le même panneau ;
 - presets étendus accessibles par drawer, sans encombrer l'écran principal.
 
+## Tone Match ajouté
+- nouvel onglet dédié dans la même grammaire SONICLINK ;
+- comparaison locale de deux extraits audio ;
+- capture micro/entrée audio Android 8 secondes ;
+- FFT + profil spectral + score de similarité ;
+- corrections bornées avec A/B local ;
+- aucune écriture matérielle automatique.
+
 ## Extensions conservées
 - 301 presets / 46 artistes / 133 presets morceaux ;
 - import/export natif `.prst` ;

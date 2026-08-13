@@ -29,6 +29,19 @@ Application Android autonome pour SONICAKE Pocket Master / QME-10.
 - Le fixture `samples/CLEAN AMBIENT.prst` fait un round-trip **octet pour octet**.
 - Les 301 presets intégrés passent l'encodeur natif.
 
+
+### Tone Match automatique
+- Analyse audio **100 % locale** : aucun extrait n'est envoyé vers un serveur.
+- Référence par fichier audio + capture de ton son actuel pendant 8 secondes ou import d'un second fichier.
+- Fenêtre d'analyse réglable (début + durée) pour viser un riff/solo précis.
+- Analyse FFT : balance spectrale, centroid, dynamique, niveau, caractère drive et estimation d'espace.
+- Trois modes : guitare isolée/solo, rythmique dense, guitare dans un mix complet.
+- Proposition de corrections limitées sur AMP / DRV / EQ / Delay / Reverb / volume global.
+- **A/B local** Original ↔ Match avant tout envoi.
+- Réglage de force 20–100 % pour éviter la sur-correction.
+- Ne remplace jamais automatiquement les modèles AMP/DRV et ne sauvegarde jamais dans la pédale.
+- Historique local des 12 dernières analyses.
+
 ### Tone DNA
 6 macros : Agressivité, Ambiance, Brillance, Chaleur, Tightness, Sustain.
 
@@ -89,6 +102,7 @@ Depuis la racine, adapter les chemins si besoin puis lancer avec Node 22+ :
 - `tools/test_mobile_codec.js` : round-trip du `.prst` de référence.
 - `tools/test_all_presets.js` : encode les 301 presets et contrôle taille + CRC.
 - `tools/test_mobile_connector.js` : simulation Hardware Guard + envoi + sauvegarde/ACK.
+- `tools/test_tone_match.js` : test du moteur FFT/matching et de l’application sûre sur un preset.
 
 ## Important avant le premier test matériel
 

@@ -1,5 +1,6 @@
 package fr.pockettonelab.mobile;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -9,12 +10,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.content.pm.PackageManager;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import android.webkit.PermissionRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -22,6 +25,8 @@ import android.webkit.WebViewClient;
 import android.view.View;
 import android.view.WindowManager;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import org.json.JSONObject;
@@ -33,8 +38,10 @@ import java.io.OutputStream;
 public class MainActivity extends Activity {
     private static final int REQ_FILE = 1201;
     private static final int REQ_SAVE = 1202;
+    private static final int REQ_AUDIO = 1203;
     private WebView webView;
     private ValueCallback<Uri[]> fileCallback;
+    private PermissionRequest pendingWebPermission;
     private byte[] pendingSaveBytes;
     private String pendingSaveMime = "application/octet-stream";
     private MidiHardwareController midi;
@@ -66,9 +73,25 @@ public class MainActivity extends Activity {
                 fileCallback = callback;
                 Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE); i.setType("*/*");
-                i.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/octet-stream","application/json","*/*"});
+                i.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"audio/*","application/octet-stream","application/json","*/*"});
                 startActivityForResult(i, REQ_FILE);
                 return true;
+            }
+
+            @Override public void onPermissionRequest(PermissionRequest request) {
+                runOnUiThread(() -> {
+                    boolean asksAudio = false;
+                    for (String resource : request.getResources()) {
+                        if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resource)) { asksAudio = true; break; }
+                    }
+                    if (!asksAudio) { request.deny(); return; }
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                        request.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});
+                    } else {
+                        pendingWebPermission = request;
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQ_AUDIO);
+                    }
+                });
             }
         });
         webView.addJavascriptInterface(new NativeBridge(), "AndroidBridge");
@@ -86,6 +109,21 @@ public class MainActivity extends Activity {
         webView.evaluateJavascript("(function(){var m=document.querySelector('.modal-shell.open'),d=document.querySelector('#presetBrowser.open');if(m){document.querySelector('[data-close-transfer]')?.click();return 'handled'}if(d){document.querySelector('#togglePresetDrawer')?.click();return 'handled'}return 'exit'})()", value -> {
             if (value == null || value.contains("exit")) MainActivity.super.onBackPressed();
         });
+    }
+
+
+    @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_AUDIO && pendingWebPermission != null) {
+            PermissionRequest req = pendingWebPermission;
+            pendingWebPermission = null;
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                req.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});
+            } else {
+                req.deny();
+                showToastJs("Permission microphone refusée");
+            }
+        }
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -119,6 +157,14 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void setWriteArmed(boolean value) { midi.setWriteArmed(value); }
         @JavascriptInterface public void setPersistentArmed(boolean value) { midi.setPersistentArmed(value); }
         @JavascriptInterface public String sendSysEx(String hex, boolean permanent) { return midi.sendSysExJson(hex, permanent); }
+
+        @JavascriptInterface public boolean hasMicrophonePermission() {
+            return ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        }
+        @JavascriptInterface public void requestMicrophonePermission() {
+            if (hasMicrophonePermission()) return;
+            runOnUiThread(() -> ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQ_AUDIO));
+        }
 
         @JavascriptInterface public void vibrate(int millis) {
             try {

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="mobile.css">
   <link rel="stylesheet" href="soniclink_original.css">
+  <link rel="stylesheet" href="tone_match.css">
 </head>
 <body>
   <div class="noise"></div>
@@ -20,6 +21,7 @@
     <nav class="nav-tabs">
       <button class="nav-btn active" data-tab="library" data-label="Tone Studio" title="Tone Studio"><span>◈</span><b>Tone Studio</b></button>
       <button class="nav-btn" data-tab="generator" data-label="Générateur" title="Générateur"><span>✦</span><b>Générateur</b></button>
+      <button class="nav-btn" data-tab="tonematch" data-label="Tone Match" title="Tone Match"><span>◎</span><b>Tone Match</b></button>
       <button class="nav-btn" data-tab="performance" data-label="Live" title="Performance"><span>▶</span><b>Live</b></button>
       <button class="nav-btn" data-tab="vault" data-label="Vault & Live" title="Vault & Live"><span>▣</span><b>Vault & Live</b></button>
       <button class="nav-btn" data-tab="transfer" data-label="Pocket Master" title="Pocket Master"><span>⇪</span><b>Pocket Master</b></button>
@@ -181,6 +183,61 @@
     </section>
 
 
+    <section id="tab-tonematch" class="tab-page tone-match-page">
+      <header class="topbar compact tm-hero">
+        <div>
+          <p class="eyebrow">LOCAL AUDIO MATCH · NO CLOUD</p>
+          <h1>TONE <em>MATCH</em></h1>
+          <p class="lead">Donne à l'app un extrait de référence puis 8 secondes de ton son actuel. Elle compare spectre, dynamique et caractère, puis propose une correction AMP / DRV / EQ / ambiance sans changer les modèles.</p>
+        </div>
+        <div class="tm-local-badge"><span>●</span><div><b>100% LOCAL</b><small>L'audio ne quitte jamais le téléphone.</small></div></div>
+      </header>
+
+      <div class="tm-current-strip panel">
+        <span>PRESET DE DÉPART</span><b id="tmCurrentPreset">Aucun preset chargé</b><small>Charge ton son dans Tone Studio avant d'appliquer le match.</small>
+      </div>
+
+      <div class="tm-source-grid">
+        <section class="panel tm-source-card tm-reference-card">
+          <div class="tm-card-head"><div><span class="tm-step">01</span><div><p class="eyebrow">TARGET</p><h2>Son de référence</h2></div></div><span id="tmRefStatus" class="tm-status">AUCUN AUDIO</span></div>
+          <p>Choisis idéalement 5–30 s où la guitare est bien audible. MP3, WAV, M4A, AAC ou autre format décodable par Android.</p>
+          <label class="tm-file-drop"><input id="tmRefFile" type="file" accept="audio/*"><span>⇩</span><b>CHOISIR L'AUDIO DE RÉFÉRENCE</b><small id="tmRefMeta">Aucun fichier</small></label>
+          <audio id="tmRefPreview" class="tm-audio" controls hidden></audio>
+          <div class="tm-window-controls"><label>Début (s)<input id="tmRefStart" type="number" min="0" step="0.5" value="0"></label><label>Durée analysée<input id="tmRefDuration" type="number" min="2" max="60" step="1" value="12"></label><button id="tmRefReanalyze" class="ghost-btn">↻ Réanalyser</button></div>
+          <div id="tmRefProfile" class="tm-profile"><div class="tm-profile-empty">Le profil spectral apparaîtra ici.</div></div>
+        </section>
+
+        <section class="panel tm-source-card tm-current-card">
+          <div class="tm-card-head"><div><span class="tm-step">02</span><div><p class="eyebrow">YOUR TONE</p><h2>Ton son actuel</h2></div></div><span id="tmSourceStatus" class="tm-status">AUCUN AUDIO</span></div>
+          <p>Enregistre le Pocket Master avec le micro/entrée audio Android, ou importe un fichier enregistré avec exactement le preset courant.</p>
+          <div class="tm-source-actions"><button id="tmRecordBtn" class="primary-btn">● ENREGISTRER 8 s</button><label class="tm-import-small"><input id="tmSourceFile" type="file" accept="audio/*"><span>⇩ Importer un fichier</span></label></div>
+          <small class="tm-record-note">Pour un résultat précis : même guitare, même position de micro/entrée, volume stable. Si Android route l'USB audio du Pocket Master comme entrée, utilise-la de préférence.</small>
+          <audio id="tmSourcePreview" class="tm-audio" controls hidden></audio>
+          <div id="tmSourceMeta" class="tm-inline-meta">Aucune capture</div>
+          <div class="tm-window-controls"><label>Début (s)<input id="tmSourceStart" type="number" min="0" step="0.5" value="0"></label><label>Durée analysée<input id="tmSourceDuration" type="number" min="2" max="60" step="1" value="12"></label><button id="tmSourceReanalyze" class="ghost-btn">↻ Réanalyser</button></div>
+          <div id="tmSourceProfile" class="tm-profile"><div class="tm-profile-empty">Le profil de ton preset apparaîtra ici.</div></div>
+        </section>
+      </div>
+
+      <section class="panel tm-console">
+        <div class="tm-console-head"><div><span class="tm-step">03</span><div><p class="eyebrow">MATCH ENGINE</p><h2>Comparer & corriger</h2></div></div><span class="native-badge">FFT · LOCAL DSP</span></div>
+        <div class="tm-settings">
+          <label>Type de référence<select id="tmFocus"><option value="isolated">Guitare isolée / solo</option><option value="rhythm">Rythmique / son dense</option><option value="mix">Guitare dans un mix complet</option></select></label>
+          <label class="tm-strength-label"><span>Force de correction <b id="tmStrengthVal">70%</b></span><input id="tmStrength" type="range" min="20" max="100" value="70"></label>
+        </div>
+        <button id="tmAnalyzeBtn" class="primary-btn tm-analyze-btn">◎ ANALYSER & PROPOSER LE MATCH</button>
+        <div id="tmResult" class="tm-result"><div class="tm-empty-result">Charge deux extraits puis lance Tone Match.</div></div>
+        <div class="tm-ab-actions"><button id="tmABar" class="ghost-btn" disabled>A · ORIGINAL</button><button id="tmBBar" class="ghost-btn" disabled>B · MATCH</button><button id="tmApplyBtn" class="primary-btn" disabled>✓ UTILISER CE MATCH</button><button id="tmSendBtn" class="ghost-btn" disabled>⇪ OUVRIR POUR ENVOI</button></div>
+        <div class="tm-safety-note"><b>Hardware Guard respecté.</b> Tone Match ne sauvegarde rien dans le Pocket Master. « Utiliser ce match » modifie seulement le preset local ; l'envoi matériel reste soumis au verrou d'écriture existant.</div>
+      </section>
+
+      <section class="panel tm-history-card">
+        <div class="section-title"><div><span class="eyebrow">LOCAL HISTORY</span><h2>Derniers Tone Match</h2></div><span class="native-badge">12 max</span></div>
+        <div id="tmHistory" class="tm-history"></div>
+      </section>
+    </section>
+
+
     <section id="tab-performance" class="tab-page performance-page">
       <header class="mobile-live-header">
         <div><p class="eyebrow">Performance Mode</p><h1>LIVE <em>CONTROL</em></h1><p>Une vue scène pensée pour les doigts : preset courant, setlist, tempo et contrôles géants.</p></div>
@@ -325,6 +382,8 @@
   <script src="mobile_api.js"></script>
   <script src="mobile_connector.js"></script>
   <script src="app.js"></script>
+  <script src="tone_match_core.js"></script>
+  <script src="tone_match.js"></script>
   <script src="mobile_extras.js"></script>
 </body>
 </html>
