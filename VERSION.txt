@@ -1,3 +1,1 @@
-Pocket Tone Lab Mobile X
-Version 1.0.0-X
-Native PRST + Android MIDI + Performance Mode + Hardware Guard
+Pocket Tone Lab Mobile X · SONICLINK UI V2

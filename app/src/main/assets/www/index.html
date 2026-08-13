@@ -7,13 +7,14 @@
   <title>Pocket Tone Lab X · SONICAKE Pocket Master</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="mobile.css">
+  <link rel="stylesheet" href="soniclink_original.css">
 </head>
 <body>
   <div class="noise"></div>
   <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark">PT</div>
-      <div><strong>Pocket Tone Lab</strong><span>SONICAKE tone workstation</span></div>
+    <div class="brand soniclink-brand">
+      <img src="soniclink/app_logo.svg" alt="SONICLINK" class="soniclink-app-logo">
+      <div><strong>SONICLINK+</strong><span>Pocket Master · Extended</span></div>
     </div>
 
     <nav class="nav-tabs">
@@ -41,17 +42,20 @@
 
   <main class="app-shell">
     <section id="tab-library" class="tab-page active studio-page">
-      <header class="studio-topbar">
-        <div class="studio-heading">
-          <p class="eyebrow">Tone workstation / Pocket Master QME-10</p>
-          <h1>Toute l’interface adopte <em>la grammaire visuelle du pedalboard.</em></h1>
-          <p>Chaque zone reprend le langage du chain view : capsules, lignes fines, halos subtils et gros espace pour tes potards.</p>
+      <header class="studio-topbar soniclink-topbar">
+        <div class="studio-heading soniclink-heading">
+          <img src="soniclink/logo_sonicake.svg" alt="SONICAKE" class="sonicake-wordmark">
+          <div>
+            <p class="eyebrow">Pocket Master QME-10</p>
+            <h1 id="mobileStudioTitle">Effects</h1>
+            <p>Édition du preset courant · fonctions étendues Pocket Tone Lab intégrées sans changer la logique SONICLINK.</p>
+          </div>
         </div>
         <div class="studio-top-actions">
-          <button id="togglePresetDrawer" class="primary-btn preset-drawer-trigger" type="button" aria-expanded="false" aria-controls="presetBrowser">▾ Bibliothèque presets</button>
-          <button id="randomBtn" class="ghost-btn">⚡ Aléatoire</button>
-          <button id="favoritesBtn" class="ghost-btn">★ Favoris</button>
-          <button id="studioFocusBtn" class="ghost-btn focus-mode-btn" type="button" title="Mode Tone Studio plein écran">⛶ Focus</button>
+          <button id="togglePresetDrawer" class="primary-btn preset-drawer-trigger" type="button" aria-expanded="false" aria-controls="presetBrowser">PRESETS</button>
+          <button id="randomBtn" class="ghost-btn">RANDOM</button>
+          <button id="favoritesBtn" class="ghost-btn">★</button>
+          <button id="studioFocusBtn" class="ghost-btn focus-mode-btn" type="button" title="Mode plein écran">⛶</button>
           <button id="studioDeviceButton" class="studio-device-pill" type="button">
             <span class="device-led"></span>
             <span><b>Pocket Master</b><small id="studioDeviceText">Non connecté</small></span>

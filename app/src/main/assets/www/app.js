@@ -1,4 +1,4 @@
-const state={presets:[],effects:null,official:null,current:null,transferPreset:null,importedPrst:null,favorites:new Set(JSON.parse(localStorage.getItem('ptl-favs')||'[]')),favoritesOnly:false,quickFilter:'all',presetDrawerOpen:false,focusMode:false,snapshots:JSON.parse(localStorage.getItem('ptl-snapshots')||'[]'),setlist:JSON.parse(localStorage.getItem('ptl-setlist')||'[]'),direct:{connector:null,devices:[],connected:false,live:false,armed:false,lastAppliedKey:null,log:[]}};
+const state={editorModule:'AMP',presets:[],effects:null,official:null,current:null,transferPreset:null,importedPrst:null,favorites:new Set(JSON.parse(localStorage.getItem('ptl-favs')||'[]')),favoritesOnly:false,quickFilter:'all',presetDrawerOpen:false,focusMode:false,snapshots:JSON.parse(localStorage.getItem('ptl-snapshots')||'[]'),setlist:JSON.parse(localStorage.getItem('ptl-setlist')||'[]'),direct:{connector:null,devices:[],connected:false,live:false,armed:false,lastAppliedKey:null,log:[]}};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const POCKETEDIT_URL='https://suckyble.github.io/PocketEdit/';
@@ -6,6 +6,8 @@ const LIVE_EFFECT_NAME_MAP={'AC Sim':'AC G','Brit50 JP':'Brit 50JP','Sol100OD':'
 const LIVE_PARAM_NAME_MAP={'VOL':'Vol','PRES':'Pres','Clipping':'Clip','H-VOL':'H-Vol','L-VOL':'L-Vol'};
 const liveEffectName=x=>LIVE_EFFECT_NAME_MAP[x]||x;
 const liveParamName=x=>LIVE_PARAM_NAME_MAP[x]||x;
+const SONICLINK_MODULE_ASSET={NR:'nr',FX1:'fx1',DRV:'drv',AMP:'amp',IR:'ir',EQ:'eq',FX2:'fx2',DLY:'dly',RVB:'rvb'};
+const moduleAsset=(m,on=true)=>`soniclink/${SONICLINK_MODULE_ASSET[m]||String(m).toLowerCase()}_${on?'on':'off'}.svg`;
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove('show'),2200)}
 function saveFavs(){localStorage.setItem('ptl-favs',JSON.stringify([...state.favorites]))}
 
@@ -154,6 +156,7 @@ function songMeta(p){
 }
 function renderDetail(p,host){
   host.classList.remove('empty-state');
+  if(!p.chain.includes(state.editorModule)) state.editorModule=p.chain.includes('AMP')?'AMP':p.chain[0];
   if(host?.id==='detailPanel')updateHardwareStrip(p);
   const activeCount=p.chain.filter(m=>p.modules[m]?.enabled).length;
   host.innerHTML=`<div class="console-hero">
@@ -173,7 +176,7 @@ function renderDetail(p,host){
       </div>
     </div>
     <div class="rack-section-head"><div><span class="eyebrow">Signal chain</span><h3>Ta chaîne en un coup d’œil</h3></div><small>Clique un bloc pour aller directement à ses potards.</small></div>
-    <div class="chain">${p.chain.map((m,i)=>{const b=p.modules[m];return `<button class="chain-node chain-${m} ${b?.enabled?'on':''}" data-chain-module="${m}"><span>${String(i+1).padStart(2,'0')}</span><b>${m}</b><small>${esc(b?.model||'OFF')}</small></button>`}).join('')}</div>
+    <div class="chain soniclink-chain">${p.chain.map((m,i)=>{const b=p.modules[m];return `<button class="chain-node chain-${m} ${b?.enabled?'on':''} ${state.editorModule===m?'editor-selected':''}" data-chain-module="${m}"><span>${String(i+1).padStart(2,'0')}</span><img class="chain-module-art" src="${moduleAsset(m,!!b?.enabled)}" alt="${m}"><b>${m}</b><small>${esc(b?.model||'OFF')}</small></button>`}).join('')}</div>
     <div class="rack-section-head controls-head"><div><span class="eyebrow">Control surface</span><h3>Potards & paramètres</h3></div><small>Glisse verticalement sur un potard, utilise la molette ou le slider.</small></div>
     <div class="module-list">${p.chain.map(m=>moduleCard(p,m)).join('')}</div>
     <div class="tip-box"><b>Conseil de jeu</b><span>${esc(p.tips)}</span></div>`;
@@ -181,7 +184,7 @@ function renderDetail(p,host){
   host.querySelector('.copy-detail').onclick=()=>navigator.clipboard.writeText(settingsText(p)).then(()=>toast('Réglages copiés'));
   host.querySelector('.json-detail').onclick=()=>downloadJSON(p);
   host.querySelector('.device-cta').onclick=()=>openTransfer(p);
-  host.querySelectorAll('[data-chain-module]').forEach(btn=>btn.onclick=()=>{const target=host.querySelector(`.module-card[data-module-card="${btn.dataset.chainModule}"]`);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.classList.add('focus-flash');setTimeout(()=>target.classList.remove('focus-flash'),850)}});
+  host.querySelectorAll('[data-chain-module]').forEach(btn=>btn.onclick=()=>{state.editorModule=btn.dataset.chainModule;renderDetail(p,host);});
   host.querySelectorAll('.toggle').forEach(btn=>btn.onclick=()=>{const m=btn.dataset.module;p.modules[m].enabled=!p.modules[m].enabled;liveSend(()=>state.direct.connector.sendModuleState(m,p.modules[m].enabled));renderDetail(p,host)});
   host.querySelectorAll('.move-block').forEach(btn=>btn.onclick=()=>moveModule(p,btn.dataset.module,Number(btn.dataset.dir),host));
   host.querySelectorAll('.param-slider').forEach(inp=>{
@@ -220,7 +223,7 @@ function changeModel(p,m,model,host){
 }
 function moduleCard(p,m){
   const b=p.modules[m]||{enabled:false,model:null,params:{}},movable=state.effects.movable.includes(m),idx=p.chain.indexOf(m),models=state.effects.library[m]?.models||{},schema=models?.[b.model]?.params||{};
-  return `<section class="module-card module-${m} ${b.enabled?'on':''}" data-module-card="${m}"><div class="module-title"><div class="module-name"><span class="module-badge"><i></i>${m}</span><div><label class="model-label">${state.effects.fixed.includes(m)?'FIXED MODULE':'MOVABLE MODULE'}</label><select class="model-select" data-module="${m}">${Object.keys(models).map(x=>`<option ${x===b.model?'selected':''}>${esc(x)}</option>`).join('')}</select><span>${b.enabled?'SIGNAL ACTIVE':'BYPASS'} · ${Object.keys(b.params||{}).length} paramètre${Object.keys(b.params||{}).length>1?'s':''}</span></div></div><div class="module-actions">${movable?`<button class="move-block" data-module="${m}" data-dir="-1" ${idx===0?'disabled':''} title="Déplacer avant">←</button><button class="move-block" data-module="${m}" data-dir="1" ${idx===p.chain.length-1?'disabled':''} title="Déplacer après">→</button>`:''}<button class="toggle ${b.enabled?'on':''}" data-module="${m}" aria-label="Activer ou bypass ${m}"></button></div></div>${b.model?`<div class="knob-grid">${Object.entries(b.params).map(([k,v])=>paramWidget(m,k,v,schema[k])).join('')}</div>`:''}</section>`;
+  return `<section class="module-card module-${m} ${b.enabled?'on':''} ${state.editorModule===m?'editor-active':''}" data-module-card="${m}"><div class="module-title"><div class="module-name"><span class="module-badge soniclink-module-badge"><img src="${moduleAsset(m,b.enabled)}" alt="${m}"></span><div class="module-select-zone"><label class="model-label">${m} · ${state.effects.fixed.includes(m)?'FIXED':'MOVABLE'}</label><select class="model-select" data-module="${m}">${Object.keys(models).map(x=>`<option ${x===b.model?'selected':''}>${esc(x)}</option>`).join('')}</select><span>${b.enabled?'ON':'OFF'} · ${Object.keys(b.params||{}).length} PARAM${Object.keys(b.params||{}).length>1?'S':''}</span></div></div><div class="module-actions">${movable?`<button class="move-block" data-module="${m}" data-dir="-1" ${idx===0?'disabled':''} title="Déplacer avant">‹</button><button class="move-block" data-module="${m}" data-dir="1" ${idx===p.chain.length-1?'disabled':''} title="Déplacer après">›</button>`:''}<button class="toggle ${b.enabled?'on':''}" data-module="${m}" aria-label="Activer ou bypass ${m}"></button></div></div>${b.model?`<div class="knob-grid">${Object.entries(b.params).map(([k,v])=>paramWidget(m,k,v,schema[k])).join('')}</div>`:''}</section>`;
 }
 function paramWidget(m,k,v,s){
   s=s||{label:k,min:0,max:100,step:1,unit:''};
