@@ -197,5 +197,41 @@
     return rows.map(([label,v])=>({label,delta:round(Number(v||0)*s,1)})).filter(x=>Math.abs(x.delta)>=.2);
   }
 
-  return {BAND_DEFS,analyzePCM,matchProfiles,similarity,applyMatchToPreset,summarizeChanges,clamp};
+  function adaptiveIterationStrength(score,previousScore=null,iteration=1,baseStrength=70){
+    const base=clamp(Number(baseStrength)||70,20,100),s=clamp(Number(score)||0,0,100),it=Math.max(1,Number(iteration)||1);
+    let factor=s<50?1:s<65?.88:s<78?.74:s<88?.58:s<94?.42:.25;
+    factor*=Math.pow(.93,Math.max(0,it-1));
+    const prev=Number(previousScore),hasPrev=previousScore!==null&&previousScore!==undefined&&previousScore!==''&&Number.isFinite(prev),improvement=hasPrev?s-prev:null;
+    const regression=hasPrev&&improvement<-2,stagnant=hasPrev&&Math.abs(improvement)<1.25;
+    if(regression)factor*=.45;else if(stagnant)factor*=.72;
+    return {strength:Math.round(clamp(base*factor,18,85)),improvement:improvement===null?null:round(improvement,1),regression,stagnant};
+  }
+
+  function residualMagnitude(match){
+    if(!match?.bandDelta)return 0;
+    const vals=Object.values(match.bandDelta).map(Number).filter(Number.isFinite);
+    return round(vals.reduce((a,v)=>a+Math.abs(v),0)/Math.max(1,vals.length),2);
+  }
+
+  function planIteration(target,source,opts={}){
+    const match=matchProfiles(target,source,opts),iteration=Math.max(1,Number(opts.iteration)||1),threshold=clamp(Number(opts.threshold)||93,80,99);
+    const adaptive=adaptiveIterationStrength(match.beforeScore,opts.previousScore,iteration,opts.baseStrength??70);
+    const converged=match.beforeScore>=threshold;
+    let status='continue';
+    if(converged)status='converged';else if(adaptive.regression)status='regression';else if(adaptive.stagnant)status='stagnant';
+    return {...match,iteration,threshold,adaptiveStrength:adaptive.strength,improvement:adaptive.improvement,regression:adaptive.regression,stagnant:adaptive.stagnant,converged,status,residual:residualMagnitude(match)};
+  }
+
+  function applyIterativeMatchToPreset(preset,plan,opts={}){
+    if(!plan)throw new Error('Plan Tone Match itératif invalide');
+    const iteration=Math.max(1,Number(opts.iteration??plan.iteration)||1),strength=Number(opts.strength??plan.adaptiveStrength??70);
+    const out=applyMatchToPreset(preset,plan,strength),baseName=String(preset?.name||'Preset').replace(/\s·\sMATCH(?:\sI\d+)?(?:.*)?$/i,'');
+    out.preset.name=`${baseName} · MATCH I${iteration}`;
+    out.preset.variant=`Tone Match I${iteration}`;
+    out.preset.description=`Tone Match itératif I${iteration} à ${Math.round(strength)}% depuis “${baseName}”.`;
+    out.preset.tone_match={...(out.preset.tone_match||{}),iterative:true,iteration,threshold:plan.threshold,adaptiveStrength:Math.round(strength),improvement:plan.improvement,residual:plan.residual,status:plan.status};
+    return out;
+  }
+
+  return {BAND_DEFS,analyzePCM,matchProfiles,similarity,applyMatchToPreset,applyIterativeMatchToPreset,summarizeChanges,adaptiveIterationStrength,planIteration,residualMagnitude,clamp};
 });

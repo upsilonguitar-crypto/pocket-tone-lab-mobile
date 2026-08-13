@@ -188,7 +188,7 @@
         <div>
           <p class="eyebrow">LOCAL AUDIO MATCH · NO CLOUD</p>
           <h1>TONE <em>MATCH</em></h1>
-          <p class="lead">Donne à l'app un extrait de référence puis 8 secondes de ton son actuel. Elle compare spectre, dynamique et caractère, puis propose une correction AMP / DRV / EQ / ambiance sans changer les modèles.</p>
+          <p class="lead">Donne à l'app un extrait de référence puis 8 secondes de ton son actuel. Elle propose un premier match, puis peut fonctionner en boucle fermée : tu testes le candidat, tu réenregistres 8 s, et elle corrige uniquement l'écart résiduel jusqu'à convergence.</p>
         </div>
         <div class="tm-local-badge"><span>●</span><div><b>100% LOCAL</b><small>L'audio ne quitte jamais le téléphone.</small></div></div>
       </header>
@@ -221,14 +221,17 @@
 
       <section class="panel tm-console">
         <div class="tm-console-head"><div><span class="tm-step">03</span><div><p class="eyebrow">MATCH ENGINE</p><h2>Comparer & corriger</h2></div></div><span class="native-badge">FFT · LOCAL DSP</span></div>
-        <div class="tm-settings">
+        <div class="tm-settings tm-settings-iterative">
           <label>Type de référence<select id="tmFocus"><option value="isolated">Guitare isolée / solo</option><option value="rhythm">Rythmique / son dense</option><option value="mix">Guitare dans un mix complet</option></select></label>
-          <label class="tm-strength-label"><span>Force de correction <b id="tmStrengthVal">70%</b></span><input id="tmStrength" type="range" min="20" max="100" value="70"></label>
+          <label class="tm-strength-label"><span>Force initiale <b id="tmStrengthVal">70%</b></span><input id="tmStrength" type="range" min="20" max="100" value="70"></label>
+          <label>Cible itérative<select id="tmIterTarget"><option value="90">90 / 100</option><option value="93" selected>93 / 100</option><option value="95">95 / 100</option><option value="97">97 / 100</option></select></label>
+          <label>Itérations max<select id="tmIterMax"><option value="3">3</option><option value="5" selected>5</option><option value="7">7</option></select></label>
         </div>
         <button id="tmAnalyzeBtn" class="primary-btn tm-analyze-btn">◎ ANALYSER & PROPOSER LE MATCH</button>
         <div id="tmResult" class="tm-result"><div class="tm-empty-result">Charge deux extraits puis lance Tone Match.</div></div>
         <div class="tm-ab-actions"><button id="tmABar" class="ghost-btn" disabled>A · ORIGINAL</button><button id="tmBBar" class="ghost-btn" disabled>B · MATCH</button><button id="tmApplyBtn" class="primary-btn" disabled>✓ UTILISER CE MATCH</button><button id="tmSendBtn" class="ghost-btn" disabled>⇪ OUVRIR POUR ENVOI</button></div>
         <div class="tm-safety-note"><b>Hardware Guard respecté.</b> Tone Match ne sauvegarde rien dans le Pocket Master. « Utiliser ce match » modifie seulement le preset local ; l'envoi matériel reste soumis au verrou d'écriture existant.</div>
+        <div id="tmIterPanel" class="tm-iter-panel"><div class="tm-iter-empty"><b>TONE MATCH ITÉRATIF</b><span>Après le premier match, mesure le résultat : l'app calcule l'écart résiduel et prépare automatiquement une micro-correction suivante.</span></div></div>
       </section>
 
       <section class="panel tm-history-card">

@@ -41,6 +41,12 @@ Application Android autonome pour SONICAKE Pocket Master / QME-10.
 - Réglage de force 20–100 % pour éviter la sur-correction.
 - Ne remplace jamais automatiquement les modèles AMP/DRV et ne sauvegarde jamais dans la pédale.
 - Historique local des 12 dernières analyses.
+- **Tone Match itératif en boucle fermée** : après le premier match, tu testes le candidat, tu réenregistres 8 s et l’app ne corrige plus que l’écart résiduel.
+- Force adaptative : plus le score se rapproche de la cible, plus la correction suivante devient douce.
+- Cible réglable 90 / 93 / 95 / 97 et limite de 3 / 5 / 7 itérations.
+- Timeline de convergence (ex. 62 → 78 → 88 → 94), meilleur preset mémorisé en RAM pendant la session.
+- Anti-overshoot : une baisse >2 points bloque automatiquement la boucle et propose rollback/reprise douce.
+- Le cycle itératif ne déclenche toujours **aucune écriture matérielle automatique**.
 
 ### Tone DNA
 6 macros : Agressivité, Ambiance, Brillance, Chaleur, Tightness, Sustain.
@@ -103,6 +109,7 @@ Depuis la racine, adapter les chemins si besoin puis lancer avec Node 22+ :
 - `tools/test_all_presets.js` : encode les 301 presets et contrôle taille + CRC.
 - `tools/test_mobile_connector.js` : simulation Hardware Guard + envoi + sauvegarde/ACK.
 - `tools/test_tone_match.js` : test du moteur FFT/matching et de l’application sûre sur un preset.
+- `tools/test_tone_match_iterative.js` : convergence, force adaptative, détection de régression et métadonnées itératives.
 
 ## Important avant le premier test matériel
 
